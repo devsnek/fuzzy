@@ -34,8 +34,7 @@ export {
 };
 
 export default function random(options = {}) {
-  let steps = 0;
-  return _random(steps, options);
+  return _random(0, options);
 }
 
 export { default as fuzzFunction } from './fuzzFunction';
