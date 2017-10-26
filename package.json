@@ -1,0 +1,17 @@
+{
+  "name": "fuzzy",
+  "version": "1.0.0",
+  "description": "super duper fuzzer for javascript",
+  "main": "src/index.mjs",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devsnek/fuzzy.git"
+  },
+  "author": "snek <me@gus.host>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devsnek/fuzzy/issues"
+  },
+  "homepage": "https://github.com/devsnek/fuzzy#readme"
+}
