@@ -2,7 +2,7 @@ import { _random, boolean } from './index';
 
 // 25.2 GeneratorFunction
 export function generatorFunction() {
-  return generator;
+  return Object.getPrototypeOf(generator).constructor;
 }
 
 // 25.3 Generator
@@ -18,7 +18,8 @@ export function promise(options = {}, steps = 0) {
   return Promise[boolean() ? 'resolve' : 'reject'](_random(steps + 1, options));
 }
 
-// 25.5 AsyncFunction Objects
+// 25.5 AsyncFunction
 export function asyncFunction() {
-  return async function af() {}; // eslint-disable-line no-empty-function
+  // eslint-disable-next-line no-empty-function
+  return Object.getPrototypeOf(async() => {}).constructor;
 }
