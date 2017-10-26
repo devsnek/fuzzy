@@ -1,5 +1,5 @@
 {
-  "name": "fuzzy",
+  "name": "@snek/fuzzy",
   "version": "1.0.0",
   "description": "super duper fuzzer for javascript",
   "main": "src/index.mjs",
