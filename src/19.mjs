@@ -15,8 +15,8 @@ export function object(options = {}, steps) {
       configurable: boolean(),
     };
     if (boolean()) {
-      base.get = function get() {}; // eslint-disable-line no-empty-function
-      base.set = function set() {}; // eslint-disable-line no-empty-function
+      if (boolean()) base.get = () => _random(steps + 1, options);
+      if (boolean()) base.set = function set() {}; // eslint-disable-line no-empty-function
     } else {
       base.value = _random(steps + 1, options);
       base.writeable = boolean();
