@@ -3,7 +3,7 @@ import { object } from './index';
 
 // 24.1 ArrayBuffer
 export function arrayBuffer(options = {}) {
-  const length = randomNumber(options.maxLength || 10);
+  const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   return new ArrayBuffer(length);
 }
 

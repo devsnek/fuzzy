@@ -3,26 +3,25 @@ import { _random, string } from './index';
 
 // 19.1 Object
 export function object(options = {}, steps) {
-  const length = randomNumber(options.maxLength || 10);
+  const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   const obj = options.base || {};
 
   while (Object.getOwnPropertyNames(obj).length < length) {
-    const name = string();
+    const name = string(Object.assign({ minLength: 1 }, options));
+    if (name in object) continue;
 
-    if (!(name in object)) {
-      const base = {
-        enumerable: boolean(),
-        configurable: boolean(),
-      };
-      if (boolean()) {
-        base.get = function get() {}; // eslint-disable-line no-empty-function
-        base.set = function set() {}; // eslint-disable-line no-empty-function
-      } else {
-        base.value = _random(steps + 1, options);
-        base.writeable = boolean();
-      }
-      Object.defineProperty(obj, name, base);
+    const base = {
+      enumerable: boolean(),
+      configurable: boolean(),
+    };
+    if (boolean()) {
+      base.get = function get() {}; // eslint-disable-line no-empty-function
+      base.set = function set() {}; // eslint-disable-line no-empty-function
+    } else {
+      base.value = _random(steps + 1, options);
+      base.writeable = boolean();
     }
+    Object.defineProperty(obj, name, base);
   }
 
   return obj;

@@ -33,6 +33,14 @@ export {
   proxy,
 };
 
+/**
+ * do the fuzz
+ * @param {Object} [options] options
+ * @param {Array} [exclude] Array of types to exclude such as `map` or `string`
+ * @param {number} [minLength] min length of iterables or min number of keys on maps
+ * @param {number} [maxLength] max length of iterables or max number of keys on maps
+ * @returns {*}
+ */
 export default function random(options = {}) {
   return _random(0, options);
 }

@@ -3,7 +3,7 @@ import { _random } from './index';
 
 // 22.1 Array
 export function array(options = {}, steps = 0) {
-  const length = randomNumber(options.maxLength || 10);
+  const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   const arr = new Array(length);
   for (let i = 0; i < length; i++) arr.push(_random(steps + 1, options));
   return arr;
@@ -17,7 +17,7 @@ const typedArrays = [
   Float32Array, Float64Array,
 ];
 export function typedArray(options = {}) {
-  const length = randomNumber(options.maxLength || 10);
+  const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   const arr = new (randomElement(typedArrays))(length);
   for (let i = 0; i < length; i++) arr[i] = randomNumber(0, 128);
   return arr;
