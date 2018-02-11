@@ -5,9 +5,9 @@ import { boolean } from './index';
 export function string(options = {}) {
   const charCodes = [];
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++)
     charCodes.push(randomNumber(65536));
-  }
+
   return String.fromCharCode.apply(null, charCodes);
 }
 

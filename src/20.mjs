@@ -14,5 +14,5 @@ export function number() {
 
 // 20.3 Date
 export function date() {
-  return new Date(randomNumber(-8640000000000000, 8640000000000000));
+  return new Date(randomNumber(-864e13, 864e13));
 }

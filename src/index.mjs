@@ -1,6 +1,6 @@
 import { randomElement, excludeElements } from './util';
 
-import { object, makeFunction, boolean, symbol, error } from './19';
+import { object, function as makeFunction, boolean, symbol, error } from './19';
 import { number, date } from './20';
 import { string, regexp } from './21';
 import { array, typedArray } from './22';
@@ -48,10 +48,13 @@ export default function random(options = {}) {
 export { default as fuzzFunction } from './fuzzFunction';
 
 export function _random(steps, options = {}) {
-  if (steps++ >= MAX_STEPS) return string();
+  if (steps++ >= MAX_STEPS)
+    return string();
 
-  if (options.values && Math.random() < 0.25) return randomElement(options.values);
-  else options.values = [];
+  if (options.values && Math.random() < 0.25)
+    return randomElement(options.values);
+  else
+    options.values = [];
 
   if (options.exclude) {
     options.included = excludeElements(options.exclude, methods);

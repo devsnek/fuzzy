@@ -6,18 +6,14 @@ export default function fuzzFunction(fn, options = {}) {
     const args = array(options);
     try {
       const ret = fn(...args);
-      if (options.returnTypes) {
-        for (const type of options.returnTypes) {
-          if (
-            (typeof type === 'string' && typeof ret !== type) ||
-            !(ret instanceof type)
-          ) {
-            errors.push(`arguments ${args} did not return one of the specified return types`);
-          }
-        }
-      }
+      if (!options.returnTypes)
+        continue;
+      const t = typeof ret;
+      if (!options.returnTypes.some((T) => t === T || ret instanceof T))
+        errors.push([args, new Error('did not return one of the specified return types')]);
     } catch (err) {
-      if (!options.canError) errors.push(`arguments ${args} threw error ${err}`);
+      if (!options.canError)
+        errors.push([args, err]);
     }
   }
   return errors;

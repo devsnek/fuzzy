@@ -1,9 +1,15 @@
 # fuzzy
 
 ```javascript
+import { fuzzFunction } from 'fuzzy';
+
+const errors = fuzzFunction(fs.writeFileSync);
+```
+
+```javascript
 import random from 'fuzzy';
 
-console.log(random())
+console.log(random());
 /*
 Set {
   Promise { undefined },

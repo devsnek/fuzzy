@@ -5,7 +5,8 @@ import { _random } from './index';
 export function array(options = {}, steps = 0) {
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   const arr = new Array(length);
-  for (let i = 0; i < length; i++) arr.push(_random(steps + 1, options));
+  for (let i = 0; i < length; i++)
+    arr[i] = _random(steps + 1, options);
   return arr;
 }
 
@@ -19,6 +20,7 @@ const typedArrays = [
 export function typedArray(options = {}) {
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   const arr = new (randomElement(typedArrays))(length);
-  for (let i = 0; i < length; i++) arr[i] = randomNumber(0, 128);
+  for (let i = 0; i < length; i++)
+    arr[i] = randomNumber(0, 128);
   return arr;
 }

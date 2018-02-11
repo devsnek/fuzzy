@@ -8,15 +8,18 @@ export function object(options = {}, steps) {
 
   while (Object.getOwnPropertyNames(obj).length < length) {
     const name = string(Object.assign({ minLength: 1 }, options));
-    if (name in object) continue;
+    if (name in object)
+      continue;
 
     const base = {
       enumerable: boolean(),
       configurable: boolean(),
     };
     if (boolean()) {
-      if (boolean()) base.get = () => _random(steps + 1, options);
-      if (boolean()) base.set = function set() {}; // eslint-disable-line no-empty-function
+      if (boolean())
+        base.get = () => _random(steps + 1, options);
+      if (boolean())
+        base.set = function set() {}; // eslint-disable-line no-empty-function
     } else {
       base.value = _random(steps + 1, options);
       base.writeable = boolean();
@@ -28,10 +31,11 @@ export function object(options = {}, steps) {
 }
 
 // 19.2 Function
-export function makeFunction() {
+function makeFunction() {
   // eslint-disable-next-line no-empty-function
   return function anonymous() {};
 }
+export { makeFunction as function };
 
 // 19.3 Boolean
 export function boolean() {
