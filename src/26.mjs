@@ -1,7 +1,7 @@
 import { boolean, object } from './index';
 
 // 26.2 Proxy
-export function proxy(options = {}, steps = 0) {
+export function proxy(options = {}, steps = 0) { // eslint-disable-line import/prefer-default-export
   return new Proxy(object(options, steps + 1), {
     has() {
       return boolean();

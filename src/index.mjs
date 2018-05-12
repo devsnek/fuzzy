@@ -8,6 +8,7 @@ import { map, set, weakMap, weakSet } from './23';
 import { arrayBuffer, json } from './24';
 import { generatorFunction, generator, promise, asyncFunction } from './25';
 import { proxy } from './26';
+import { bigint } from './staged';
 
 export const MAX_STEPS = 10;
 
@@ -20,6 +21,7 @@ const methods = [
   arrayBuffer, json,
   generatorFunction, generator, promise, asyncFunction,
   proxy,
+  bigint,
 ];
 
 export {
@@ -31,7 +33,32 @@ export {
   arrayBuffer, json,
   generatorFunction, generator, promise, asyncFunction,
   proxy,
+  bigint,
 };
+
+export { default as fuzzFunction } from './fuzzFunction';
+
+export function _random(steps, options = {}) {
+  steps += 1;
+  if (steps >= MAX_STEPS) {
+    return string();
+  }
+
+  if (options.values && Math.random() < 0.25) {
+    return randomElement(options.values);
+  }
+  options.values = [];
+
+  if (options.exclude) {
+    options.included = excludeElements(options.exclude, methods);
+    delete options.exclude;
+  }
+
+  const value = randomElement(options.included || methods)(options, steps);
+  options.values.push(value);
+
+  return value;
+}
 
 /**
  * do the fuzz
@@ -45,24 +72,3 @@ export default function random(options = {}) {
   return _random(0, options);
 }
 
-export { default as fuzzFunction } from './fuzzFunction';
-
-export function _random(steps, options = {}) {
-  if (steps++ >= MAX_STEPS)
-    return string();
-
-  if (options.values && Math.random() < 0.25)
-    return randomElement(options.values);
-  else
-    options.values = [];
-
-  if (options.exclude) {
-    options.included = excludeElements(options.exclude, methods);
-    delete options.exclude;
-  }
-
-  const value = randomElement(options.included || methods)(options, steps);
-  options.values.push(value);
-
-  return value;
-}

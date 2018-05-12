@@ -2,14 +2,15 @@ import { _random, boolean } from './index';
 
 // 25.2 GeneratorFunction
 export function generatorFunction() {
-  return Object.getPrototypeOf(generator).constructor;
+  // eslint-disable-next-line no-empty-function
+  return Object.getPrototypeOf(function* g() {}).constructor;
 }
 
 // 25.3 Generator
 export function* generator(options = {}, steps = 0) {
-  yield _random(steps, options); steps++;
-  yield _random(steps, options); steps++;
-  yield _random(steps, options); steps++;
+  yield _random(steps, options); steps += 1;
+  yield _random(steps, options); steps += 1;
+  yield _random(steps, options); steps += 1;
   return _random(steps, options);
 }
 
@@ -21,5 +22,5 @@ export function promise(options = {}, steps = 0) {
 // 25.5 AsyncFunction
 export function asyncFunction() {
   // eslint-disable-next-line no-empty-function
-  return Object.getPrototypeOf(async() => {}).constructor;
+  return Object.getPrototypeOf(async () => {}).constructor;
 }

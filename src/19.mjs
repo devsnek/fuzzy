@@ -1,6 +1,11 @@
 import { randomElement, randomNumber } from './util';
 import { _random, string } from './index';
 
+// 19.3 Boolean
+export function boolean() {
+  return Math.random() > 0.5;
+}
+
 // 19.1 Object
 export function object(options = {}, steps) {
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
@@ -8,18 +13,21 @@ export function object(options = {}, steps) {
 
   while (Object.getOwnPropertyNames(obj).length < length) {
     const name = string(Object.assign({ minLength: 1 }, options));
-    if (name in object)
-      continue;
+    if (name in object) {
+      continue; // eslint-disable-line no-continue
+    }
 
     const base = {
       enumerable: boolean(),
       configurable: boolean(),
     };
     if (boolean()) {
-      if (boolean())
+      if (boolean()) {
         base.get = () => _random(steps + 1, options);
-      if (boolean())
-        base.set = function set() {}; // eslint-disable-line no-empty-function
+      }
+      if (boolean()) {
+        base.set = function set() {};
+      } // eslint-disable-line no-empty-function
     } else {
       base.value = _random(steps + 1, options);
       base.writeable = boolean();
@@ -36,11 +44,6 @@ function makeFunction() {
   return function anonymous() {};
 }
 export { makeFunction as function };
-
-// 19.3 Boolean
-export function boolean() {
-  return Math.random() > 0.5;
-}
 
 // 19.4 Symbol
 export function symbol() {
