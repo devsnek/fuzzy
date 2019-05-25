@@ -1,5 +1,5 @@
-import { randomNumber } from './util';
-import { object } from './index';
+import { randomNumber } from './util.mjs';
+import { object } from './index.mjs';
 
 // 24.1 ArrayBuffer
 export function arrayBuffer(options = {}) {

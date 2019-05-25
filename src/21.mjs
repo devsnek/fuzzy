@@ -1,5 +1,5 @@
-import { randomNumber } from './util';
-import { boolean } from './index';
+import { randomNumber } from './util.mjs';
+import { boolean } from './index.mjs';
 
 // 21.1 String
 export function string(options = {}) {
@@ -16,8 +16,8 @@ export function string(options = {}) {
 export function regexp() {
   return new RegExp(
     '((a)|(ab))((c)|(bc))',
-    (boolean() ? 'g' : '') +
-    (boolean() ? 'i' : '') +
-    (boolean() ? 'm' : ''),
+    (boolean() ? 'g' : '')
+    + (boolean() ? 'i' : '')
+    + (boolean() ? 'm' : ''),
   );
 }

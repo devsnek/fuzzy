@@ -1,5 +1,5 @@
-import { randomNumber, randomElement } from './util';
-import { _random } from './index';
+import { randomNumber, randomElement } from './util.mjs';
+import { _random } from './index.mjs';
 
 // 22.1 Array
 export function array(options = {}, steps = 0) {

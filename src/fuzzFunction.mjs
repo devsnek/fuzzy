@@ -1,4 +1,4 @@
-import { array } from './index';
+import { array } from './index.mjs';
 
 export default function fuzzFunction(fn, options = {}) {
   const errors = [];

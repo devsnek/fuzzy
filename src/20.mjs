@@ -1,5 +1,5 @@
-import { randomElement, randomNumber } from './util';
-import { boolean } from './index';
+import { randomElement, randomNumber } from './util.mjs';
+import { boolean } from './index.mjs';
 
 // 20.1 Number
 export function number() {

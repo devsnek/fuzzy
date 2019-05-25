@@ -1,4 +1,4 @@
-import { boolean, object } from './index';
+import { boolean, object } from './index.mjs';
 
 // 26.2 Proxy
 export function proxy(options = {}, steps = 0) { // eslint-disable-line import/prefer-default-export

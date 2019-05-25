@@ -1,5 +1,5 @@
-import { randomNumber } from './util';
-import { _random, object } from './index';
+import { randomNumber } from './util.mjs';
+import { _random, object } from './index.mjs';
 
 // 23.1 Map
 export function map(options = {}, steps = 0) {

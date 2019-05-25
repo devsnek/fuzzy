@@ -1,19 +1,19 @@
-import { randomElement, excludeElements } from './util';
+import { randomElement, excludeElements } from './util.mjs';
 
-import { object, function as makeFunction, boolean, symbol, error } from './19';
-import { number, date } from './20';
-import { string, regexp } from './21';
-import { array, typedArray } from './22';
-import { map, set, weakMap, weakSet } from './23';
-import { arrayBuffer, json } from './24';
-import { generatorFunction, generator, promise, asyncFunction } from './25';
-import { proxy } from './26';
-import { bigint } from './staged';
+import { object, function as fuzzyFunction, boolean, symbol, error } from './19.mjs';
+import { number, date } from './20.mjs';
+import { string, regexp } from './21.mjs';
+import { array, typedArray } from './22.mjs';
+import { map, set, weakMap, weakSet } from './23.mjs';
+import { arrayBuffer, json } from './24.mjs';
+import { generatorFunction, generator, promise, asyncFunction } from './25.mjs';
+import { proxy } from './26.mjs';
+import { bigint } from './staged.mjs';
 
 export const MAX_STEPS = 10;
 
 const methods = [
-  object, makeFunction, boolean, symbol, error,
+  object, fuzzyFunction, boolean, symbol, error,
   number, date,
   string, regexp,
   array, typedArray,
@@ -25,7 +25,7 @@ const methods = [
 ];
 
 export {
-  object, makeFunction as function, boolean, symbol, error,
+  object, fuzzyFunction as function, boolean, symbol, error,
   number, date,
   string, regexp,
   array, typedArray,
@@ -36,7 +36,7 @@ export {
   bigint,
 };
 
-export { default as fuzzFunction } from './fuzzFunction';
+export { default as fuzzFunction } from './fuzzFunction.mjs';
 
 export function _random(steps, options = {}) {
   steps += 1;
@@ -71,4 +71,3 @@ export function _random(steps, options = {}) {
 export default function random(options = {}) {
   return _random(0, options);
 }
-

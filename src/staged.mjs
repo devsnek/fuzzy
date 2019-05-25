@@ -1,5 +1,5 @@
-import { randomNumber } from './util';
-import { boolean } from './19';
+import { randomNumber } from './util.mjs';
+import { boolean } from './19.mjs';
 
 // https://github.com/tc39/proposal-bigint
 export function bigint() { // eslint-disable-line import/prefer-default-export

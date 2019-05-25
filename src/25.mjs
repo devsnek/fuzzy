@@ -1,4 +1,4 @@
-import { _random, boolean } from './index';
+import { _random, boolean } from './index.mjs';
 
 // 25.2 GeneratorFunction
 export function generatorFunction() {
