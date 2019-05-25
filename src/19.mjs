@@ -21,7 +21,7 @@ export function object(options = {}, steps) {
       enumerable: boolean(),
       configurable: boolean(),
     };
-    if (boolean()) {
+    if (options.accessors && boolean()) {
       if (boolean()) {
         base.get = () => _random(steps + 1, options);
       }
