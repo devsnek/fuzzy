@@ -39,10 +39,16 @@ function string(options = {}) {
   const charCodes = [];
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   for (let i = 0; i < length; i += 1) {
-    charCodes.push(randomNumber(65536));
+    let cp = randomNumber(0x10FFFF);
+    if (!options.invalidUnicode) {
+      while (cp >= 0xD800 && cp <= 0xDFFF) {
+        cp = randomNumber(0x10FFFF);
+      }
+    }
+    charCodes.push(cp);
   }
 
-  return String.fromCharCode.apply(null, charCodes);
+  return String.fromCodePoint.apply(null, charCodes);
 }
 
 function symbol(options = {}) {
