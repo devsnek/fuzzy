@@ -262,11 +262,14 @@ function fuzzFunction(fn, options = {}) {
   return errors;
 }
 
-module.exports = function random(options = {}) {
+function random(options = {}) {
   return irandom(0, options);
-};
+}
+
+module.epxorts = random;
 
 Object.assign(module.exports, {
+  random,
   fuzzFunction,
 
   undefined: fuzzyUndefined,
