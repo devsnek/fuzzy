@@ -35,17 +35,22 @@ function number() {
   ])();
 }
 
+const CODEPOINTS = Array.from({ length: 0x10FFFF }, (_, i) => i);
+const CODEPOINTS_LEGAL = CODEPOINTS
+  .filter((v) => {
+    if (v >= 0xD800 && v <= 0xDFFF) {
+      return false;
+    }
+    if (v >= 0xF000 && v <= 0xFFFF) {
+      return false;
+    }
+    return true;
+  });
 function string(options = {}) {
   const charCodes = [];
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   for (let i = 0; i < length; i += 1) {
-    let cp = randomNumber(0x10FFFF);
-    if (!options.invalidUnicode) {
-      while (cp >= 0xD800 && cp <= 0xDFFF) {
-        cp = randomNumber(0x10FFFF);
-      }
-    }
-    charCodes.push(cp);
+    charCodes.push(randomElement(options.illegalUnicode ? CODEPOINTS : CODEPOINTS_LEGAL));
   }
 
   return String.fromCodePoint.apply(null, charCodes);
@@ -65,7 +70,9 @@ function regexp() {
 }
 
 function object(options = {}, steps = 0) {
-  const length = randomNumber(options.minLength || 0, options.maxLength || 10);
+  const length = steps > options.maxSteps
+    ? 0
+    : randomNumber(options.minLength || 0, options.maxLength || 10);
   const obj = options.base || {};
 
   while (Object.getOwnPropertyNames(obj).length < length) {
@@ -86,7 +93,7 @@ function object(options = {}, steps = 0) {
         base.set = () => 0;
       } // eslint-disable-line no-empty-function
     } else {
-      base.value = irandom(steps + 1, options);
+      base.value = irandom(steps, options);
       base.writeable = boolean();
     }
     Object.defineProperty(obj, name, base);
@@ -97,10 +104,10 @@ function object(options = {}, steps = 0) {
 
 function fuzzyFunction(options = {}, steps = 0) {
   if (boolean()) {
-    return () => irandom(steps + 1, options);
+    return () => irandom(steps, options);
   }
   const x = (0, function () { // eslint-disable-line func-names
-    return irandom(steps + 1, options);
+    return irandom(steps, options);
   });
   if (boolean()) {
     Object.defineProperty(x, 'name', {
@@ -111,10 +118,12 @@ function fuzzyFunction(options = {}, steps = 0) {
 }
 
 function array(options = {}, steps = 0) {
-  const length = randomNumber(options.minLength || 0, options.maxLength || 10);
+  const length = steps > options.maxSteps
+    ? 0
+    : randomNumber(options.minLength || 0, options.maxLength || 10);
   const arr = new Array(length);
   for (let i = 0; i < length; i += 1) {
-    arr[i] = irandom(steps + 1, options);
+    arr[i] = irandom(steps, options);
   }
   return arr;
 }
@@ -140,28 +149,34 @@ function error() {
 }
 
 function map(options = {}, steps = 0) {
-  const length = randomNumber(options.minLength || 0, options.maxLength || 5);
+  const length = steps > options.maxSteps
+    ? 0
+    : randomNumber(options.minLength || 0, options.maxLength || 5);
   const m = new Map();
   for (let i = 0; i < length; i += 1) {
-    m.set(irandom(steps + 1, options), irandom(steps + 1, options));
+    m.set(irandom(steps, options), irandom(steps, options));
   }
   return m;
 }
 
 function set(options = {}, steps = 0) {
-  const length = randomNumber(options.minLength || 0, options.maxLength || 10);
+  const length = steps > options.maxSteps
+    ? 0
+    : randomNumber(options.minLength || 0, options.maxLength || 10);
   const s = new Set();
   for (let i = 0; i < length; i += 1) {
-    s.add(irandom(steps + 1, options));
+    s.add(irandom(steps, options));
   }
   return s;
 }
 
 function weakMap(options = {}, steps = 0) {
-  const length = randomNumber(options.minLength || 0, options.maxLength || 5);
+  const length = steps > options.maxSteps
+    ? 0
+    : randomNumber(options.minLength || 0, options.maxLength || 5);
   const m = new WeakMap();
   for (let i = 0; i < length; i += 1) {
-    m.set(object(options, steps + 1), irandom(steps + 1, options));
+    m.set(object(options, steps), irandom(steps, options));
   }
   return m;
 }
@@ -170,7 +185,7 @@ function weakSet(options = {}, steps = 0) {
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   const s = new WeakSet();
   for (let i = 0; i < length; i += 1) {
-    s.add(object(options, steps + 1));
+    s.add(object(options, steps));
   }
   return s;
 }
@@ -185,7 +200,7 @@ function arrayBuffer(options = {}) {
 }
 
 function json(options = {}, steps = 0) {
-  return JSON.stringify(object(options, steps + 1), (key, value) => {
+  return JSON.stringify(object(options, steps), (key, value) => {
     if (typeof value === 'bigint') { // eslint-disable-line valid-typeof
       return 0;
     }
@@ -194,11 +209,11 @@ function json(options = {}, steps = 0) {
 }
 
 function promise(options = {}, steps = 0) {
-  return Promise[boolean() ? 'resolve' : 'reject'](irandom(steps + 1, options));
+  return Promise[boolean() ? 'resolve' : 'reject'](irandom(steps, options));
 }
 
 function proxy(options = {}, steps = 0) {
-  return new Proxy(object(options, steps + 1), {
+  return new Proxy(object(options, steps), {
     has() {
       return boolean();
     },
@@ -225,9 +240,8 @@ const METHODS = [
 ];
 
 function irandom(steps, options = {}) {
-  steps += 1;
-  if (steps >= (options.maxSteps || 10)) {
-    return boolean() ? string() : number();
+  if (!options.maxSteps) {
+    options.maxSteps = 10;
   }
 
   if (options.values && options.values.length > 0 && Math.random() < 0.15) {
@@ -240,7 +254,7 @@ function irandom(steps, options = {}) {
     delete options.exclude;
   }
 
-  const value = randomElement(options.included || METHODS)(options, steps);
+  const value = randomElement(options.included || METHODS)(options, steps + 1);
   options.values.push(value);
 
   return value;
