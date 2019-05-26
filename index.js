@@ -46,11 +46,31 @@ const CODEPOINTS_LEGAL = CODEPOINTS
     }
     return true;
   });
+const calculateCodepointWeight = (cp) => {
+  if (cp <= 0xFFFF) {
+    return 40;
+  }
+  return 1;
+};
+const CODEPOINTS_MAX_WEIGHT = CODEPOINTS.reduce((ac, cp) => ac + calculateCodepointWeight(cp), 0);
+const CODEPOINTS_LEGAL_MAX_WEIGHT = CODEPOINTS
+  .reduce((ac, cp) => ac + calculateCodepointWeight(cp), 0);
+
 function string(options = {}) {
   const charCodes = [];
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
   for (let i = 0; i < length; i += 1) {
-    charCodes.push(randomElement(options.illegalUnicode ? CODEPOINTS : CODEPOINTS_LEGAL));
+    const r = randomNumber(options.illegalUnicode
+      ? CODEPOINTS_MAX_WEIGHT
+      : CODEPOINTS_LEGAL_MAX_WEIGHT);
+    let s = 0;
+    for (const cp of options.illegalUnicode ? CODEPOINTS : CODEPOINTS_LEGAL) {
+      s += calculateCodepointWeight(cp);
+      if (r <= s) {
+        charCodes.push(cp);
+        break;
+      }
+    }
   }
 
   return String.fromCodePoint.apply(null, charCodes);
@@ -69,6 +89,7 @@ function regexp() {
   );
 }
 
+const HasOwnProperty = Object.prototype.hasOwnProperty;
 function object(options = {}, steps = 0) {
   const length = steps > options.maxSteps
     ? 0
@@ -76,8 +97,8 @@ function object(options = {}, steps = 0) {
   const obj = options.base || {};
 
   while (Object.getOwnPropertyNames(obj).length < length) {
-    const name = string(Object.assign({ minLength: 1 }, options));
-    if (name in object) {
+    const name = string({ ...options, minLength: 1 });
+    if (HasOwnProperty.call(obj, name)) {
       continue; // eslint-disable-line no-continue
     }
 
@@ -93,7 +114,7 @@ function object(options = {}, steps = 0) {
         base.set = () => 0;
       } // eslint-disable-line no-empty-function
     } else {
-      base.value = irandom(steps, options);
+      base.value = irandom(steps + 1, options);
       base.writeable = boolean();
     }
     Object.defineProperty(obj, name, base);
@@ -154,7 +175,7 @@ function map(options = {}, steps = 0) {
     : randomNumber(options.minLength || 0, options.maxLength || 5);
   const m = new Map();
   for (let i = 0; i < length; i += 1) {
-    m.set(irandom(steps, options), irandom(steps, options));
+    m.set(irandom(steps, options), irandom(steps + 1, options));
   }
   return m;
 }
@@ -176,16 +197,18 @@ function weakMap(options = {}, steps = 0) {
     : randomNumber(options.minLength || 0, options.maxLength || 5);
   const m = new WeakMap();
   for (let i = 0; i < length; i += 1) {
-    m.set(object(options, steps), irandom(steps, options));
+    m.set(object(options, steps + 1), irandom(steps, options));
   }
   return m;
 }
 
 function weakSet(options = {}, steps = 0) {
-  const length = randomNumber(options.minLength || 0, options.maxLength || 10);
+  const length = steps > options.maxSteps
+    ? 0
+    : randomNumber(options.minLength || 0, options.maxLength || 10);
   const s = new WeakSet();
   for (let i = 0; i < length; i += 1) {
-    s.add(object(options, steps));
+    s.add(object(options, steps + 1));
   }
   return s;
 }
@@ -200,7 +223,7 @@ function arrayBuffer(options = {}) {
 }
 
 function json(options = {}, steps = 0) {
-  return JSON.stringify(object(options, steps), (key, value) => {
+  return JSON.stringify(object(options, steps + 1), (key, value) => {
     if (typeof value === 'bigint') { // eslint-disable-line valid-typeof
       return 0;
     }
@@ -213,7 +236,7 @@ function promise(options = {}, steps = 0) {
 }
 
 function proxy(options = {}, steps = 0) {
-  return new Proxy(object(options, steps), {
+  return new Proxy(object(options, steps + 1), {
     has() {
       return boolean();
     },
@@ -286,7 +309,7 @@ function random(options = {}) {
   return irandom(0, options);
 }
 
-module.epxorts = random;
+module.exports = random;
 
 Object.assign(module.exports, {
   random,
