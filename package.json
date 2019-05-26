@@ -1,6 +1,6 @@
 {
   "name": "@devsnek/fuzzy",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "super duper fuzzer for javascript",
   "main": "src/index.mjs",
   "repository": {
