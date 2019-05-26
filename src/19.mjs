@@ -39,11 +39,11 @@ export function object(options = {}, steps) {
 }
 
 // 19.2 Function
-function makeFunction() {
+function fuzzyFunction() {
   // eslint-disable-next-line no-empty-function
   return function anonymous() {};
 }
-export { makeFunction as function };
+export { fuzzyFunction as function };
 
 // 19.4 Symbol
 export function symbol() {

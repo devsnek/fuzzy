@@ -1,5 +1,6 @@
 import { randomElement, excludeElements } from './util.mjs';
 
+import { undefined as fuzzyUndefined, null as fuzzyNull } from './6.mjs';
 import { object, function as fuzzyFunction, boolean, symbol, error } from './19.mjs';
 import { number, date } from './20.mjs';
 import { string, regexp } from './21.mjs';
@@ -13,6 +14,7 @@ import { bigint } from './staged.mjs';
 export const MAX_STEPS = 10;
 
 const methods = [
+  fuzzyUndefined, fuzzyNull,
   object, fuzzyFunction, boolean, symbol, error,
   number, date,
   string, regexp,
@@ -25,6 +27,7 @@ const methods = [
 ];
 
 export {
+  fuzzyUndefined as undefined, fuzzyNull as null,
   object, fuzzyFunction as function, boolean, symbol, error,
   number, date,
   string, regexp,
@@ -41,10 +44,10 @@ export { default as fuzzFunction } from './fuzzFunction.mjs';
 export function _random(steps, options = {}) {
   steps += 1;
   if (steps >= MAX_STEPS) {
-    return string();
+    return boolean() ? string() : number();
   }
 
-  if (options.values && Math.random() < 0.25) {
+  if (options.values && options.values.length > 0 && Math.random() < 0.15) {
     return randomElement(options.values);
   }
   options.values = [];
