@@ -1,13 +1,13 @@
 # fuzzy
 
 ```javascript
-import { fuzzFunction } from 'fuzzy';
+const { fuzzFunction } = require('@devsnek/fuzzy');
 
 const errors = fuzzFunction(fs.writeFileSync);
 ```
 
 ```javascript
-import random from 'fuzzy';
+const random = require('@devsnek/fuzzy');
 
 console.log(random());
 /*
@@ -23,7 +23,8 @@ Set {
 
 You can also import all the individual methods
 ```javascript
-import { object } from 'fuzzy';
+const { object } = require('@devsnek/fuzzy');
+
 console.log(object());
 /*
 { '䛺늙휠�ꇆ䣽ㄱ慰뜐': [Getter/Setter],

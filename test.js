@@ -1,10 +1,12 @@
+'use strict';
+
 /* eslint-disable no-console */
 
-import { error, fuzzFunction } from '../src/index.mjs';
+const { error, fuzzFunction } = require('.');
 
 fuzzFunction(console.log, { exclude: [error] });
 
-process.on('unhandledRejection', (e) => {
+process.on('unhandledRejection', () => {
   // console.error(e);
   // process.exit(1);
 });
