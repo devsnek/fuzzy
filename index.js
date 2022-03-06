@@ -35,44 +35,33 @@ function number() {
   ])();
 }
 
-const CODEPOINTS = Array.from({ length: 0x10FFFF }, (_, i) => i);
-const CODEPOINTS_LEGAL = CODEPOINTS
-  .filter((v) => {
-    if (v >= 0xD800 && v <= 0xDFFF) {
-      return false;
-    }
-    if (v >= 0xF000 && v <= 0xFFFF) {
-      return false;
-    }
-    return true;
-  });
-const calculateCodepointWeight = (cp) => {
-  if (cp <= 0xFFFF) {
-    return 40;
+function isLegal(v) {
+  if (v >= 0xD800 && v <= 0xDFFF) {
+    return false;
   }
-  return 1;
-};
-const CODEPOINTS_MAX_WEIGHT = CODEPOINTS.reduce((ac, cp) => ac + calculateCodepointWeight(cp), 0);
-const CODEPOINTS_LEGAL_MAX_WEIGHT = CODEPOINTS
-  .reduce((ac, cp) => ac + calculateCodepointWeight(cp), 0);
+  if (v >= 0xF000 && v <= 0xFFFF) {
+    return false;
+  }
+  return true;
+}
+const CODEPOINTS_LEGAL = [];
+const CODEPOINTS = [];
+for (let i = 0; i < 0x10FFFF; i += 1) {
+  const weight = i < 0xFFFF ? 40 : 1;
+
+  const items = Array.from({ length: weight }, () => i);
+  CODEPOINTS.push(...items);
+  if (isLegal(i)) {
+    CODEPOINTS_LEGAL.push(...items);
+  }
+}
 
 function string(options = {}) {
-  const charCodes = [];
   const length = randomNumber(options.minLength || 0, options.maxLength || 10);
-  for (let i = 0; i < length; i += 1) {
-    const r = randomNumber(options.illegalUnicode
-      ? CODEPOINTS_MAX_WEIGHT
-      : CODEPOINTS_LEGAL_MAX_WEIGHT);
-    let s = 0;
-    for (const cp of options.illegalUnicode ? CODEPOINTS : CODEPOINTS_LEGAL) {
-      s += calculateCodepointWeight(cp);
-      if (r <= s) {
-        charCodes.push(cp);
-        break;
-      }
-    }
-  }
-
+  const charCodes = Array.from(
+    { length },
+    () => randomElement(options.illegalUnicode ? CODEPOINTS : CODEPOINTS_LEGAL),
+  );
   return String.fromCodePoint.apply(null, charCodes);
 }
 
